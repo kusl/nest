@@ -1,10 +1,10 @@
 ===============================================================================
 PROJECT EXPORT
-Generated (UTC): 2026-11-05 15:47:36
+Generated (UTC): 2026-11-05 15:53:03
 Project Path:    /home/kushal/src/dotnet/nest
-Git Commit:      2ce68d657fccb46d435d80e2d66302b5b1f7ed35
+Git Commit:      26b6e2703ea218b5d6169c5ec0ef079444c9b9b1
 Git Branch:      main
-Git Dirty:       yes (uncommitted changes are included below)
+Git Dirty:       no
 .NET SDK:        10.0.113
 Files Exported:  143
 ===============================================================================
@@ -523,10 +523,10 @@ Decisions that were ambiguous in the brief, or that trade one property for anoth
 
 ================================================================================
 FILE:     docs/adr/0002-rendering-model.md
-SIZE:     1.72 KB (1759 bytes)
-LINES:    13
-SHA256:   6baf1da8cf7783173b0b3bd279d31a32708fd6647003c094a1fad3afc3d69981
-MODIFIED: 2026-11-05 15:41:27 (UTC)
+SIZE:     1.98 KB (2031 bytes)
+LINES:    14
+SHA256:   8f19ad61a30590df9f4949d238a1240f07cc8ddfa22d1889ecab4916d2d16fdf
+MODIFIED: 2026-11-05 15:50:13 (UTC)
 ================================================================================
 
 # 0002 Static SSR, one sync island, views in JavaScript
@@ -541,6 +541,7 @@ Status: accepted
 - `App.razor.js` mounts the view for the element with `data-view` on load and on `enhancedload`, and disposes the previous one. The view root is `data-permanent` with a per-page id, so enhanced navigation does not overwrite JavaScript-owned markup and two different homes never share one.
 - Shared logic is in plain modules under `wwwroot/js` (`keys`, `fields`, `merge`, `store`, `sync`), served at `/js/`. One `Nest` instance per document holds the entries, so the island and the view see the same state.
 - Reusable Razor components: `ListingCard`, `CommentItem`, `FactList`, `FieldInput`.
+- Razor components are generated as public classes, so their parameters use only public types (strings, numbers, `Guid`, framework collections). Domain types stay internal; a component that needs one resolves it from a key, as `FieldInput` does with `ListingFields.Find`.
 - No bUnit: components are thin; logic lives in services and modules tested directly, and pages are covered by integration and Playwright tests.
 
 
@@ -2369,10 +2370,10 @@ MODIFIED: 2026-11-05 15:13:16 (UTC)
 
 ================================================================================
 FILE:     src/Nest.Web/Components/Pages/HomesPage.razor
-SIZE:     3.16 KB (3231 bytes)
-LINES:    71
-SHA256:   c6fc83b9d599abdf98af61ebcb454abaa196739b23e17b8957a94131b25108e4
-MODIFIED: 2026-11-05 15:29:12 (UTC)
+SIZE:     3.36 KB (3437 bytes)
+LINES:    72
+SHA256:   965294d1194a9cac3c7670065982fe5c204bf0cdfec5b51f4ff8d0e0ea4b33d0
+MODIFIED: 2026-11-05 15:50:13 (UTC)
 ================================================================================
 
 @page "/"
@@ -2402,7 +2403,7 @@ MODIFIED: 2026-11-05 15:29:12 (UTC)
             <form id="add-address" class="address" autocomplete="off">
                 @foreach (var field in ListingFields.All.Where(candidate => ListingFields.AddressKeys.Contains(candidate.Key)))
                 {
-                    <FieldInput Field="field" Prefix="add" />
+                    <FieldInput FieldKey="@field.Key" Prefix="add" />
                 }
                 <div class="actions">
                     <button type="submit" disabled>Add home</button>
@@ -2426,7 +2427,8 @@ MODIFIED: 2026-11-05 15:29:12 (UTC)
         <ol id="homes-list" class="cards">
             @foreach (var listing in _listings.Take(100))
             {
-                <ListingCard @key="listing.Key" Listing="listing" />
+                <ListingCard @key="listing.Key" HomeKey="@listing.Key" Title="@listing.Title" Place="@listing.Place" Summary="@listing.Summary"
+                             Sources="@listing.Sources" CommentCount="listing.Comments.Count" Updated="listing.Updated" />
             }
         </ol>
         <button type="button" id="homes-more" class="more" hidden>Show more homes</button>
@@ -2944,10 +2946,10 @@ export function mount(root, shared, win) {
 
 ================================================================================
 FILE:     src/Nest.Web/Components/Pages/ListingPage.razor
-SIZE:     6.69 KB (6846 bytes)
+SIZE:     6.71 KB (6873 bytes)
 LINES:    153
-SHA256:   35a6b657a6829cb2cf9761b7b0bc81ead41a847f82fb1db267eddb591cf348ca
-MODIFIED: 2026-11-05 15:30:10 (UTC)
+SHA256:   ec9bcaa0233fb22b1404853d715d974742412c9518948ec2e8f27c7db33dfce1
+MODIFIED: 2026-11-05 15:50:13 (UTC)
 ================================================================================
 
 @page "/homes/{Provider}/{Token}"
@@ -3007,7 +3009,7 @@ else
                 <form id="facts-form" class="facts-form" autocomplete="off" novalidate>
                     @foreach (var field in ListingFields.All)
                     {
-                        <FieldInput Field="field" Prefix="fact" Value="@_fields.GetValueOrDefault(field.Key)" />
+                        <FieldInput FieldKey="@field.Key" Prefix="fact" Value="@_fields.GetValueOrDefault(field.Key)" />
                     }
                     <div class="actions">
                         <button type="submit" disabled>Save details</button>
@@ -3023,7 +3025,7 @@ else
             <ol id="comments" class="comments">
                 @foreach (var comment in _listing?.Comments ?? [])
                 {
-                    <CommentItem @key="comment.Id" Comment="comment" />
+                    <CommentItem @key="comment.Id" Id="comment.Id" Text="@comment.Text" />
                 }
             </ol>
             <p id="comments-empty" class="empty" hidden="@(_listing?.Comments.Count > 0)">No comments yet.</p>
@@ -3904,20 +3906,23 @@ MODIFIED: 2026-11-05 15:27:39 (UTC)
 
 ================================================================================
 FILE:     src/Nest.Web/Components/Shared/CommentItem.razor
-SIZE:     0.28 KB (286 bytes)
-LINES:    9
-SHA256:   df2a9ed361f4180eec106d6211458b85412c3733b6dafb4df512caaf1ced8a7c
-MODIFIED: 2026-11-05 15:28:39 (UTC)
+SIZE:     0.30 KB (310 bytes)
+LINES:    12
+SHA256:   bc9fdca6742474054247d868384c334099892c8008b2a7004d504bce94a10fd2
+MODIFIED: 2026-11-05 15:49:57 (UTC)
 ================================================================================
 
-<li class="comment" data-id="@Comment.Id">
-    <div class="head"><time datetime="@EntryTime.Iso(Comment.Id)">@EntryTime.Label(Comment.Id)</time></div>
-    <p class="text">@Comment.Text</p>
+<li class="comment" data-id="@Id">
+    <div class="head"><time datetime="@EntryTime.Iso(Id)">@EntryTime.Label(Id)</time></div>
+    <p class="text">@Text</p>
 </li>
 
 @code {
     [Parameter, EditorRequired]
-    public Entry Comment { get; set; } = null!;
+    public Guid Id { get; set; }
+
+    [Parameter, EditorRequired]
+    public string? Text { get; set; }
 }
 
 
@@ -3950,35 +3955,40 @@ MODIFIED: 2026-11-05 15:28:39 (UTC)
 
 ================================================================================
 FILE:     src/Nest.Web/Components/Shared/FieldInput.razor
-SIZE:     1.51 KB (1549 bytes)
-LINES:    45
-SHA256:   b2f0ff826ac1b57835ff8258b63950f30ff79d9bab6bb8fe78f7eff68c43bd11
-MODIFIED: 2026-11-05 15:30:10 (UTC)
+SIZE:     1.82 KB (1864 bytes)
+LINES:    52
+SHA256:   77c2fc023f086601bde8e0613419b322435383b746abd69034dc46033c54a244
+MODIFIED: 2026-11-05 15:50:02 (UTC)
 ================================================================================
 
-<div class="field" data-kind="@Field.Kind" data-wide="@(Field.Kind == FieldKind.Text && Field.MaxLength > 60)">
-    <label for="@Id">@Field.Label</label>
-    @if (Field.Options is { } options)
-    {
-        <select id="@Id" name="@Field.Key" aria-describedby="@ErrorId">
-            <option value="">Not set</option>
-            @foreach (var option in options)
-            {
-                <option value="@option" selected="@(option == Value)">@option</option>
-            }
-        </select>
-    }
-    else
-    {
-        <input id="@Id" name="@Field.Key" type="text" inputmode="@InputMode" autocomplete="off" spellcheck="@Spellcheck"
-               maxlength="@MaxLength" value="@Value" placeholder="@Field.Hint" aria-describedby="@ErrorId" />
-    }
-    <small id="@ErrorId" class="error" aria-live="polite"></small>
-</div>
+@if (_field is { } field)
+{
+    <div class="field" data-kind="@field.Kind" data-wide="@(field.Kind == FieldKind.Text && field.MaxLength > 60)">
+        <label for="@Id">@field.Label</label>
+        @if (field.Options is { } options)
+        {
+            <select id="@Id" name="@field.Key" aria-describedby="@ErrorId">
+                <option value="">Not set</option>
+                @foreach (var option in options)
+                {
+                    <option value="@option" selected="@(option == Value)">@option</option>
+                }
+            </select>
+        }
+        else
+        {
+            <input id="@Id" name="@field.Key" type="text" inputmode="@InputMode(field.Kind)" autocomplete="off" spellcheck="@Spellcheck(field.Kind)"
+                   maxlength="@MaxLength(field)" value="@Value" placeholder="@field.Hint" aria-describedby="@ErrorId" />
+        }
+        <small id="@ErrorId" class="error" aria-live="polite"></small>
+    </div>
+}
 
 @code {
+    private ListingField? _field;
+
     [Parameter, EditorRequired]
-    public ListingField Field { get; set; } = null!;
+    public string FieldKey { get; set; } = "";
 
     [Parameter, EditorRequired]
     public string Prefix { get; set; } = "";
@@ -3986,60 +3996,80 @@ MODIFIED: 2026-11-05 15:30:10 (UTC)
     [Parameter]
     public string? Value { get; set; }
 
-    private string Id => string.Concat(Prefix, "-", Field.Key);
+    private string Id => string.Concat(Prefix, "-", FieldKey);
 
     private string ErrorId => string.Concat(Id, "-error");
 
-    private string InputMode => Field.Kind switch
+    protected override void OnParametersSet() => _field = ListingFields.Find(FieldKey);
+
+    private static string InputMode(FieldKind kind) => kind switch
     {
         FieldKind.Count or FieldKind.Integer or FieldKind.Zip => "numeric",
         FieldKind.Decimal => "decimal",
         _ => "text",
     };
 
-    private string Spellcheck => Field.Kind == FieldKind.Text ? "true" : "false";
+    private static string Spellcheck(FieldKind kind) => kind == FieldKind.Text ? "true" : "false";
 
-    private int MaxLength => Field.Kind == FieldKind.Text ? Field.MaxLength : 64;
+    private static int MaxLength(ListingField field) => field.Kind == FieldKind.Text ? field.MaxLength : 64;
 }
 
 
 ================================================================================
 FILE:     src/Nest.Web/Components/Shared/ListingCard.razor
-SIZE:     1.02 KB (1043 bytes)
-LINES:    30
-SHA256:   d815039b73e8b7bda132b0a9f4c52c6157ec758a666214d738f0fd081d580f4e
-MODIFIED: 2026-11-05 15:28:39 (UTC)
+SIZE:     1.30 KB (1328 bytes)
+LINES:    48
+SHA256:   c61ea46e6854632dc2324a5648638fd86bf46615b1f83984d722acb7d02c4c12
+MODIFIED: 2026-11-05 15:50:06 (UTC)
 ================================================================================
 
-<li class="home" data-key="@Listing.Key">
-    <a href="@ListingKey.Path(Listing.Key)">
-        <strong class="title">@Listing.Title</strong>
-        @if (Listing.Place is { Length: > 0 } place && place != Listing.Title)
+<li class="home" data-key="@HomeKey">
+    <a href="@ListingKey.Path(HomeKey)">
+        <strong class="title">@Title</strong>
+        @if (Place is { Length: > 0 } && Place != Title)
         {
-            <span class="place">@place</span>
+            <span class="place">@Place</span>
         }
-        @if (Listing.Summary is { Length: > 0 } summary)
+        @if (Summary is { Length: > 0 })
         {
-            <span class="summary">@summary</span>
+            <span class="summary">@Summary</span>
         }
         <span class="meta">
-            @if (Listing.Sources is { Length: > 0 } sources)
+            @if (Sources is { Length: > 0 })
             {
-                <span>@sources</span>
+                <span>@Sources</span>
             }
             <span>@CommentsLabel</span>
-            <time datetime="@EntryTime.Iso(Listing.Updated)">@EntryTime.Label(Listing.Updated)</time>
+            <time datetime="@EntryTime.Iso(Updated)">@EntryTime.Label(Updated)</time>
         </span>
     </a>
 </li>
 
 @code {
     [Parameter, EditorRequired]
-    public Listing Listing { get; set; } = null!;
+    public string HomeKey { get; set; } = "";
 
-    private string CommentsLabel => Listing.Comments.Count == 1
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public string? Place { get; set; }
+
+    [Parameter]
+    public string? Summary { get; set; }
+
+    [Parameter]
+    public string? Sources { get; set; }
+
+    [Parameter, EditorRequired]
+    public int CommentCount { get; set; }
+
+    [Parameter, EditorRequired]
+    public Guid Updated { get; set; }
+
+    private string CommentsLabel => CommentCount == 1
         ? "1 comment"
-        : string.Concat(Listing.Comments.Count.ToString(System.Globalization.CultureInfo.InvariantCulture), " comments");
+        : string.Concat(CommentCount.ToString(System.Globalization.CultureInfo.InvariantCulture), " comments");
 }
 
 
@@ -11610,9 +11640,9 @@ export default defineConfig({
 
 
 ===============================================================================
-EXPORT COMPLETED (UTC): 2026-11-05 15:47:37
+EXPORT COMPLETED (UTC): 2026-11-05 15:53:04
 Total Files Exported:   143
-Total Source Size:      0.32 MB (333708 bytes)
+Total Source Size:      0.32 MB (334837 bytes)
 Output File:            /home/kushal/src/dotnet/nest/docs/llm/dump.txt
 ===============================================================================
-DUMP SHA256 (of all lines above this one): 2c62cfda2fc8f8ab176eb52d95e3bff9da7b506ca358ccb5e82ad4fc235258cc
+DUMP SHA256 (of all lines above this one): 512914b5e40f6d57ff3ee260298d1cc2b6c22f78edcf16c9b7c3942115ae81e5

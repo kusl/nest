@@ -1,0 +1,266 @@
+[
+  {
+    "key": "price",
+    "input": "450000",
+    "ok": true,
+    "value": "450000"
+  },
+  {
+    "key": "price",
+    "input": "$450,000",
+    "ok": true,
+    "value": "450000"
+  },
+  {
+    "key": "price",
+    "input": "450k",
+    "ok": true,
+    "value": "450000"
+  },
+  {
+    "key": "price",
+    "input": "1.25M",
+    "ok": true,
+    "value": "1250000"
+  },
+  {
+    "key": "price",
+    "input": "450000.00",
+    "ok": true,
+    "value": "450000"
+  },
+  {
+    "key": "price",
+    "input": "450000.50",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "price",
+    "input": "1.2345k",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "price",
+    "input": "abc",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "price",
+    "input": "",
+    "ok": true,
+    "value": ""
+  },
+  {
+    "key": "price",
+    "input": "007",
+    "ok": true,
+    "value": "7"
+  },
+  {
+    "key": "price",
+    "input": "99999999999",
+    "ok": true,
+    "value": "99999999999"
+  },
+  {
+    "key": "price",
+    "input": "100000000000",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "price",
+    "input": "0",
+    "ok": true,
+    "value": "0"
+  },
+  {
+    "key": "beds",
+    "input": "3",
+    "ok": true,
+    "value": "3"
+  },
+  {
+    "key": "beds",
+    "input": "03",
+    "ok": true,
+    "value": "3"
+  },
+  {
+    "key": "beds",
+    "input": "3.5",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "beds",
+    "input": "100",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "baths",
+    "input": "2.5",
+    "ok": true,
+    "value": "2.5"
+  },
+  {
+    "key": "baths",
+    "input": "2.50",
+    "ok": true,
+    "value": "2.5"
+  },
+  {
+    "key": "baths",
+    "input": "2.0",
+    "ok": true,
+    "value": "2"
+  },
+  {
+    "key": "baths",
+    "input": "02.25",
+    "ok": true,
+    "value": "2.25"
+  },
+  {
+    "key": "baths",
+    "input": "2.125",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "sqft",
+    "input": "1,800",
+    "ok": true,
+    "value": "1800"
+  },
+  {
+    "key": "sqft",
+    "input": "0",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "sqft",
+    "input": "10000001",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "year",
+    "input": "1925",
+    "ok": true,
+    "value": "1925"
+  },
+  {
+    "key": "year",
+    "input": "1599",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "year",
+    "input": "2101",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "status",
+    "input": "for sale",
+    "ok": true,
+    "value": "For sale"
+  },
+  {
+    "key": "status",
+    "input": "SOLD",
+    "ok": true,
+    "value": "Sold"
+  },
+  {
+    "key": "status",
+    "input": "maybe",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "type",
+    "input": "condo",
+    "ok": true,
+    "value": "Condo"
+  },
+  {
+    "key": "state",
+    "input": "ny",
+    "ok": true,
+    "value": "NY"
+  },
+  {
+    "key": "state",
+    "input": "New York",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "zip",
+    "input": "13777",
+    "ok": true,
+    "value": "13777"
+  },
+  {
+    "key": "zip",
+    "input": "13777-1234",
+    "ok": true,
+    "value": "13777"
+  },
+  {
+    "key": "zip",
+    "input": "137771234",
+    "ok": true,
+    "value": "13777"
+  },
+  {
+    "key": "zip",
+    "input": "1377",
+    "ok": false,
+    "value": null
+  },
+  {
+    "key": "street",
+    "input": "  2893   State\tRoute 26  ",
+    "ok": true,
+    "value": "2893 State Route 26"
+  },
+  {
+    "key": "street",
+    "input": "Main St\u0007",
+    "ok": true,
+    "value": "Main St"
+  },
+  {
+    "key": "lot",
+    "input": "0.25 acres",
+    "ok": true,
+    "value": "0.25 acres"
+  },
+  {
+    "key": "lot",
+    "input": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx😀",
+    "ok": true,
+    "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+    "key": "parking",
+    "input": "🚗 2-car garage",
+    "ok": true,
+    "value": "🚗 2-car garage"
+  },
+  {
+    "key": "pool",
+    "input": "yes",
+    "ok": false,
+    "value": null
+  }
+]

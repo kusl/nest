@@ -1,0 +1,153 @@
+@page "/homes/{Provider}/{Token}"
+@inject NestService Service
+
+@if (_key is null)
+{
+    <PageTitle>Not found · Nest</PageTitle>
+
+    <h1>Nothing here</h1>
+    <p class="lede">That isn't a home address on this site. Go back to <a href="">all homes</a>.</p>
+}
+else
+{
+    <PageTitle>@_title · Nest</PageTitle>
+
+    <SyncIsland Client="@_client" @rendermode="InteractiveServer" />
+
+    <div class="view" data-view="listing" data-key="@_key" data-permanent="@($"listing-{_key}")">
+        <p class="crumbs"><a href="">All homes</a></p>
+        <header class="intro">
+            <h1 id="listing-title">@_title</h1>
+            <p id="listing-place" class="place" hidden="@(_place.Length == 0)">@_place</p>
+            <p id="listing-summary" class="summary" hidden="@(_summary.Length == 0)">@_summary</p>
+            <p id="sync-status" class="sync" data-status="local" role="status">Connecting…</p>
+        </header>
+
+        <div id="listing-missing" class="missing" hidden="@(_listing is not null)">
+            <p id="listing-missing-text" role="status">This home isn't on the server right now. Looking in this browser…</p>
+            <button type="button" id="listing-claim" hidden>Add this home</button>
+        </div>
+
+        <section aria-labelledby="links-title">
+            <h2 id="links-title">Links</h2>
+            <ul id="listing-links" class="links">
+                @foreach (var link in _listing?.Links ?? [])
+                {
+                    <li><a href="@link.Url" target="_blank" rel="noopener noreferrer">Open on @ListingKey.ProviderLabel(link.Provider)</a> <span class="url">@link.Url</span></li>
+                }
+            </ul>
+            <form id="add-more-link" class="inline" autocomplete="off">
+                <label for="more-link-input">Another link for this home</label>
+                <div class="row">
+                    <input id="more-link-input" type="text" inputmode="url" autocapitalize="off" spellcheck="false" placeholder="https://www.redfin.com/…" />
+                    <button type="submit" disabled>Add link</button>
+                </div>
+                <p id="more-link-status" class="status" role="status"></p>
+            </form>
+        </section>
+
+        <section aria-labelledby="facts-title">
+            <h2 id="facts-title">Details</h2>
+            <FactList Fields="@_fields" />
+            <details id="facts-editor" class="editor">
+                <summary>Edit details</summary>
+                <p id="facts-suggestion" class="suggestion" hidden></p>
+                <form id="facts-form" class="facts-form" autocomplete="off" novalidate>
+                    @foreach (var field in ListingFields.All)
+                    {
+                        <FieldInput Field="field" Prefix="fact" Value="@_fields.GetValueOrDefault(field.Key)" />
+                    }
+                    <div class="actions">
+                        <button type="submit" disabled>Save details</button>
+                        <p id="facts-status" class="status" role="status"></p>
+                    </div>
+                </form>
+                <p class="hint">Only what you change is sent. The newest value of each detail wins, and the one before it is shown next to it.</p>
+            </details>
+        </section>
+
+        <section aria-labelledby="comments-title">
+            <h2 id="comments-title">Comments <span id="comments-count">@CountLabel</span></h2>
+            <ol id="comments" class="comments">
+                @foreach (var comment in _listing?.Comments ?? [])
+                {
+                    <CommentItem @key="comment.Id" Comment="comment" />
+                }
+            </ol>
+            <p id="comments-empty" class="empty" hidden="@(_listing?.Comments.Count > 0)">No comments yet.</p>
+            <form id="comment-form" class="compose" autocomplete="off">
+                <label for="comment-text" class="visually-hidden">Comment</label>
+                <textarea id="comment-text" maxlength="@CommentText.MaxLength" rows="4" aria-describedby="comment-count"
+                          placeholder="What do you think of this home? Everyone here will see it."></textarea>
+                <div class="actions">
+                    <p id="comment-status" class="status" role="status"></p>
+                    <span id="comment-count" class="count"></span>
+                    <span class="hint">Ctrl+Enter sends</span>
+                    <button type="submit" disabled>Send</button>
+                </div>
+            </form>
+        </section>
+
+        <section aria-labelledby="keys-title">
+            <h2 id="keys-title">Known as</h2>
+            <p class="hint">Everything filed under any of these is shown on this page.</p>
+            <ul id="listing-keys" class="keys">
+                @foreach (var key in _listing?.Keys ?? [_key])
+                {
+                    <li><span class="provider">@ListingKey.ProviderLabel(ListingKey.ProviderOf(key))</span> <code>@KeyText(key)</code></li>
+                }
+            </ul>
+        </section>
+    </div>
+}
+
+@code {
+    private static readonly IReadOnlyDictionary<string, string> NoFields = new Dictionary<string, string>(StringComparer.Ordinal);
+    private string? _key;
+    private Listing? _listing;
+    private IReadOnlyDictionary<string, string> _fields = NoFields;
+    private string _title = "";
+    private string _place = "";
+    private string _summary = "";
+    private string _client = ClientAddress.Unknown;
+
+    [Parameter]
+    public string? Provider { get; set; }
+
+    [Parameter]
+    public string? Token { get; set; }
+
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    private string CountLabel => _listing is { Comments.Count: > 0 } listing
+        ? string.Concat("(", listing.Comments.Count.ToString(System.Globalization.CultureInfo.InvariantCulture), ")")
+        : "";
+
+    protected override void OnParametersSet()
+    {
+        _key = Provider is null ? null : ListingKey.Of(Provider, Token);
+        _client = ClientAddress.Key(HttpContext?.Connection.RemoteIpAddress);
+        if (_key is null)
+        {
+            if (HttpContext is { Response.HasStarted: false } context)
+            {
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
+            }
+
+            return;
+        }
+
+        _listing = Service.FindListing(_key);
+        _fields = _listing?.Fields ?? NoFields;
+        _title = _listing?.Title ?? ListingKey.Label(_key);
+        _place = _listing is null || _listing.Place == _title ? "" : _listing.Place;
+        _summary = _listing?.Summary ?? "";
+    }
+
+    private static string KeyText(string key)
+    {
+        var label = ListingKey.Label(key);
+        return ListingKey.ProviderOf(key) == ListingKey.Address ? label : label[(label.IndexOf(' ', StringComparison.Ordinal) + 1)..];
+    }
+}

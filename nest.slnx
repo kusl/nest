@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Nest.Web/Nest.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Nest.Web.Tests/Nest.Web.Tests.csproj" />
+    <Project Path="tests/Nest.E2E/Nest.E2E.csproj" />
+  </Folder>
+</Solution>

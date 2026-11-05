@@ -1,0 +1,301 @@
+.crumbs {
+    margin: 0;
+    font-size: .875rem;
+}
+
+.intro {
+    display: grid;
+    gap: .2rem;
+}
+
+.intro h1 {
+    overflow-wrap: anywhere;
+}
+
+.place,
+.summary {
+    margin: 0;
+}
+
+.place {
+    color: var(--muted);
+}
+
+.summary {
+    font-size: 1.1rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+}
+
+.missing {
+    margin-block: 1rem;
+    padding: .75rem 1rem;
+    border-inline-start: 4px solid var(--ink);
+    background: var(--surface);
+}
+
+.missing p {
+    margin: 0 0 .5rem;
+}
+
+.links {
+    display: grid;
+    gap: .4rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.links ::deep li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .1rem .75rem;
+}
+
+.links ::deep a {
+    font-weight: 650;
+}
+
+.links ::deep .url {
+    min-inline-size: 0;
+    color: var(--muted);
+    font-size: .8rem;
+    overflow-wrap: anywhere;
+}
+
+.inline {
+    display: grid;
+    gap: .35rem;
+}
+
+.inline label {
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+.row {
+    display: flex;
+    gap: .5rem;
+}
+
+.row input {
+    flex: 1;
+    min-inline-size: 0;
+}
+
+.row button {
+    flex: none;
+}
+
+section ::deep .facts {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: .35rem 1rem;
+    margin: 0 0 1rem;
+}
+
+section ::deep .facts[hidden] {
+    display: none;
+}
+
+section ::deep .facts div {
+    display: contents;
+}
+
+section ::deep .facts dt {
+    color: var(--muted);
+}
+
+section ::deep .facts dd {
+    margin: 0;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+
+section ::deep .facts .was {
+    color: var(--muted);
+    font-weight: 400;
+}
+
+.editor {
+    margin-block-start: .5rem;
+}
+
+.editor summary {
+    inline-size: fit-content;
+    min-block-size: var(--tap);
+    padding: .55rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.suggestion {
+    margin: .75rem 0 0;
+    padding: .5rem .75rem;
+    border-inline-start: 4px solid var(--ink);
+    background: var(--surface);
+}
+
+.facts-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
+    gap: .75rem;
+    margin-block-start: .75rem;
+}
+
+.facts-form ::deep .field {
+    display: grid;
+    align-content: start;
+    gap: .2rem;
+}
+
+.facts-form ::deep .field[data-wide] {
+    grid-column: 1 / -1;
+}
+
+.facts-form ::deep label {
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+.facts-form ::deep .error {
+    color: var(--danger);
+    font-size: .8rem;
+}
+
+.facts-form ::deep .error:empty {
+    display: none;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    grid-column: 1 / -1;
+}
+
+.actions .status {
+    flex: 1 1 100%;
+}
+
+.hint {
+    color: var(--muted);
+    font-size: .8rem;
+}
+
+.comments {
+    display: grid;
+    gap: .6rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.comments ::deep .comment {
+    padding: .5rem .8rem .6rem;
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    background: var(--bg);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 4.5rem;
+}
+
+.comments ::deep .comment.archived {
+    border-style: dotted;
+    border-color: var(--muted);
+}
+
+.comments ::deep .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .25rem .6rem;
+}
+
+.comments ::deep time {
+    color: var(--muted);
+    font-size: .75rem;
+}
+
+.comments ::deep .yours {
+    padding: 0 .5rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: .7rem;
+}
+
+.comments ::deep .text {
+    margin: .2rem 0 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.compose {
+    display: grid;
+    gap: .5rem;
+    margin-block-start: .75rem;
+}
+
+.compose textarea {
+    min-block-size: 6rem;
+    resize: vertical;
+}
+
+.count {
+    color: var(--muted);
+    font-size: .8rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.count.full {
+    color: var(--danger);
+    font-weight: 650;
+}
+
+.compose .actions .status {
+    flex: 1 1 auto;
+}
+
+.compose .actions button {
+    margin-inline-start: auto;
+}
+
+.keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.keys ::deep li {
+    padding: .15rem .6rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: .8rem;
+    overflow-wrap: anywhere;
+}
+
+.keys ::deep .provider {
+    color: var(--muted);
+}
+
+@keyframes arrive {
+    from {
+        background: color-mix(in oklab, var(--ink) 20%, var(--bg));
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .comments ::deep .comment.fresh {
+        animation: arrive .9s ease-out;
+    }
+}

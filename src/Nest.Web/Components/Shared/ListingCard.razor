@@ -1,0 +1,30 @@
+<li class="home" data-key="@Listing.Key">
+    <a href="@ListingKey.Path(Listing.Key)">
+        <strong class="title">@Listing.Title</strong>
+        @if (Listing.Place is { Length: > 0 } place && place != Listing.Title)
+        {
+            <span class="place">@place</span>
+        }
+        @if (Listing.Summary is { Length: > 0 } summary)
+        {
+            <span class="summary">@summary</span>
+        }
+        <span class="meta">
+            @if (Listing.Sources is { Length: > 0 } sources)
+            {
+                <span>@sources</span>
+            }
+            <span>@CommentsLabel</span>
+            <time datetime="@EntryTime.Iso(Listing.Updated)">@EntryTime.Label(Listing.Updated)</time>
+        </span>
+    </a>
+</li>
+
+@code {
+    [Parameter, EditorRequired]
+    public Listing Listing { get; set; } = null!;
+
+    private string CommentsLabel => Listing.Comments.Count == 1
+        ? "1 comment"
+        : string.Concat(Listing.Comments.Count.ToString(System.Globalization.CultureInfo.InvariantCulture), " comments");
+}

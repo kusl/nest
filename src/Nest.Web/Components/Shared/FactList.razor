@@ -1,0 +1,17 @@
+<dl id="listing-facts" class="facts" hidden="@(!HasAny)">
+    @foreach (var field in ListingFields.All)
+    {
+        if (Fields.TryGetValue(field.Key, out var value))
+        {
+            <div><dt>@field.Label</dt><dd>@ListingFields.Display(field.Key, value)</dd></div>
+        }
+    }
+</dl>
+<p id="facts-empty" class="empty" hidden="@HasAny">No details yet. Add what you know.</p>
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyDictionary<string, string> Fields { get; set; } = null!;
+
+    private bool HasAny => Fields.Count > 0;
+}

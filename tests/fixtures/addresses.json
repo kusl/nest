@@ -1,0 +1,68 @@
+[
+  {
+    "street": "2893 State Route 26",
+    "unit": "",
+    "zip": "13777",
+    "key": "address:13777-2893-state-rte-26"
+  },
+  {
+    "street": "2893 STATE RTE 26",
+    "unit": "",
+    "zip": "13777",
+    "key": "address:13777-2893-state-rte-26"
+  },
+  {
+    "street": "100 W 57th St",
+    "unit": "12B",
+    "zip": "10019",
+    "key": "address:10019-100-w-57th-st-unit-12b"
+  },
+  {
+    "street": "100 West 57th Street Apt 12B",
+    "unit": "",
+    "zip": "10019",
+    "key": "address:10019-100-w-57th-st-unit-12b"
+  },
+  {
+    "street": "100 W. 57th St. #12B",
+    "unit": "",
+    "zip": "10019",
+    "key": "address:10019-100-w-57th-st-unit-12b"
+  },
+  {
+    "street": "100 W 57th St",
+    "unit": "Unit 12B",
+    "zip": "10019",
+    "key": "address:10019-100-w-57th-st-unit-12b"
+  },
+  {
+    "street": "100 W 57th St Apt 3",
+    "unit": "12B",
+    "zip": "10019",
+    "key": "address:10019-100-w-57th-st-unit-12b"
+  },
+  {
+    "street": "Ünïcode Straße 5",
+    "unit": "",
+    "zip": "12345",
+    "key": "address:12345-n-code-stra-e-5"
+  },
+  {
+    "street": "",
+    "unit": "",
+    "zip": "13777",
+    "key": null
+  },
+  {
+    "street": "1 Main St",
+    "unit": "",
+    "zip": "1377",
+    "key": null
+  },
+  {
+    "street": "Apt 4",
+    "unit": "",
+    "zip": "13777",
+    "key": "address:13777-apt-4"
+  }
+]

@@ -1,0 +1,154 @@
+{
+  "entries": [
+    {
+      "id": "01950001-0000-7000-8000-000000000001",
+      "kind": "link",
+      "keys": [
+        "zillow:29747113"
+      ],
+      "url": "https://www.zillow.com/homedetails/29747113_zpid/"
+    },
+    {
+      "id": "01950002-0000-7000-8000-000000000002",
+      "kind": "fact",
+      "keys": [
+        "zillow:29747113"
+      ],
+      "fields": [
+        {
+          "key": "price",
+          "value": "450000"
+        },
+        {
+          "key": "beds",
+          "value": "3"
+        }
+      ]
+    },
+    {
+      "id": "01950003-0000-7000-8000-000000000003",
+      "kind": "link",
+      "keys": [
+        "redfin:88990011"
+      ],
+      "url": "https://www.redfin.com/NY/Glen-Aubrey/2893-State-Route-26-13777/home/88990011"
+    },
+    {
+      "id": "01950004-0000-7000-8000-000000000004",
+      "kind": "comment",
+      "keys": [
+        "redfin:88990011"
+      ],
+      "text": "Near the school."
+    },
+    {
+      "id": "01950005-0000-7000-8000-000000000005",
+      "kind": "fact",
+      "keys": [
+        "address:13777-2893-state-rte-26",
+        "zillow:29747113"
+      ],
+      "fields": [
+        {
+          "key": "street",
+          "value": "2893 State Route 26"
+        },
+        {
+          "key": "zip",
+          "value": "13777"
+        }
+      ]
+    },
+    {
+      "id": "01950006-0000-7000-8000-000000000006",
+      "kind": "comment",
+      "keys": [
+        "url:c559c7f3a993a408"
+      ],
+      "text": "Different place."
+    },
+    {
+      "id": "01950007-0000-7000-8000-000000000007",
+      "kind": "fact",
+      "keys": [
+        "address:13777-2893-state-rte-26",
+        "redfin:88990011"
+      ],
+      "fields": [
+        {
+          "key": "beds",
+          "value": "4"
+        }
+      ]
+    },
+    {
+      "id": "01950008-0000-7000-8000-000000000008",
+      "kind": "link",
+      "keys": [
+        "url:c559c7f3a993a408"
+      ],
+      "url": "https://www.homes.com/property/x/abc123/"
+    },
+    {
+      "id": "01950009-0000-7000-8000-000000000009",
+      "kind": "fact",
+      "keys": [
+        "zillow:29747113"
+      ],
+      "fields": [
+        {
+          "key": "price",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "0195000a-0000-7000-8000-00000000000a",
+      "kind": "comment",
+      "keys": [
+        "zillow:29747113"
+      ],
+      "text": "Roof looks new 🏠"
+    }
+  ],
+  "listings": [
+    {
+      "key": "zillow:29747113",
+      "keys": [
+        "zillow:29747113",
+        "redfin:88990011",
+        "address:13777-2893-state-rte-26"
+      ],
+      "links": [
+        "https://www.zillow.com/homedetails/29747113_zpid/",
+        "https://www.redfin.com/NY/Glen-Aubrey/2893-State-Route-26-13777/home/88990011"
+      ],
+      "fields": {
+        "beds": "4",
+        "street": "2893 State Route 26",
+        "zip": "13777"
+      },
+      "comments": [
+        "01950004-0000-7000-8000-000000000004",
+        "0195000a-0000-7000-8000-00000000000a"
+      ],
+      "updated": "0195000a-0000-7000-8000-00000000000a",
+      "title": "2893 State Route 26"
+    },
+    {
+      "key": "url:c559c7f3a993a408",
+      "keys": [
+        "url:c559c7f3a993a408"
+      ],
+      "links": [
+        "https://www.homes.com/property/x/abc123/"
+      ],
+      "fields": {},
+      "comments": [
+        "01950006-0000-7000-8000-000000000006"
+      ],
+      "updated": "01950008-0000-7000-8000-000000000008",
+      "title": "Link c559c7"
+    }
+  ]
+}

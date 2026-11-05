@@ -1,0 +1,45 @@
+<div class="field" data-kind="@Field.Kind" data-wide="@(Field.Kind == FieldKind.Text && Field.MaxLength > 60)">
+    <label for="@Id">@Field.Label</label>
+    @if (Field.Options is { } options)
+    {
+        <select id="@Id" name="@Field.Key" aria-describedby="@ErrorId">
+            <option value="">Not set</option>
+            @foreach (var option in options)
+            {
+                <option value="@option" selected="@(option == Value)">@option</option>
+            }
+        </select>
+    }
+    else
+    {
+        <input id="@Id" name="@Field.Key" type="text" inputmode="@InputMode" autocomplete="off" spellcheck="@Spellcheck"
+               maxlength="@MaxLength" value="@Value" placeholder="@Field.Hint" aria-describedby="@ErrorId" />
+    }
+    <small id="@ErrorId" class="error" aria-live="polite"></small>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public ListingField Field { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public string Prefix { get; set; } = "";
+
+    [Parameter]
+    public string? Value { get; set; }
+
+    private string Id => string.Concat(Prefix, "-", Field.Key);
+
+    private string ErrorId => string.Concat(Id, "-error");
+
+    private string InputMode => Field.Kind switch
+    {
+        FieldKind.Count or FieldKind.Integer or FieldKind.Zip => "numeric",
+        FieldKind.Decimal => "decimal",
+        _ => "text",
+    };
+
+    private string Spellcheck => Field.Kind == FieldKind.Text ? "true" : "false";
+
+    private int MaxLength => Field.Kind == FieldKind.Text ? Field.MaxLength : 64;
+}

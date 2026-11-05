@@ -1,0 +1,122 @@
+@using System.Text.Json
+@implements IAsyncDisposable
+@inject NestService Service
+@inject IJSRuntime JS
+@inject ILogger<SyncIsland> Logger
+
+@code {
+    private readonly TaskCompletionSource _attached = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private DotNetObjectReference<SyncIsland>? _self;
+    private IJSObjectReference? _module;
+    private IJSObjectReference? _client;
+    private Outbox<NestUpdate>? _outbox;
+    private Subscriber? _subscriber;
+    private int _offered;
+
+    [Parameter, EditorRequired]
+    public string Client { get; set; } = ClientAddress.Unknown;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return;
+        }
+
+        _self = DotNetObjectReference.Create(this);
+        _module = await JS.InvokeAsync<IJSObjectReference>("import", ModulePath.Of(Assets["Components/Islands/SyncIsland.razor.js"]));
+        _client = await _module.InvokeAsync<IJSObjectReference>("attach", _self);
+        _attached.TrySetResult();
+    }
+
+    [JSInvokable]
+    public async Task Join()
+    {
+        await StopAsync();
+        var outbox = new Outbox<NestUpdate>(64, 16, TimeSpan.FromSeconds(20), SendAsync, Logger);
+        _outbox = outbox;
+        _subscriber = new Subscriber(outbox);
+        Service.Subscribe(_subscriber);
+    }
+
+    [JSInvokable]
+    public bool Ping() => _subscriber is not null && _outbox is { IsFaulted: false } && Service.IsSubscribed(_subscriber);
+
+    [JSInvokable]
+    public JsonElement Fetch(string[]? ids)
+    {
+        var parsed = new List<Guid>();
+        foreach (var id in (ids ?? []).Take(NestService.MaxFetch))
+        {
+            if (Guid.TryParseExact(id, "D", out var guid))
+            {
+                parsed.Add(guid);
+            }
+        }
+
+        return Wire.Write(Service.Find(parsed));
+    }
+
+    [JSInvokable]
+    public int Offer(JsonElement entries)
+    {
+        var wires = Wire.Read<EntryWire?[]>(entries);
+        var budget = Math.Min(Service.Capacity - _offered, wires?.Length ?? 0);
+        if (wires is null || budget <= 0)
+        {
+            return 0;
+        }
+
+        _offered += budget;
+        var offered = new List<Entry>(budget);
+        for (var i = 0; i < budget; i++)
+        {
+            if (wires[i]?.ToEntry() is { } entry)
+            {
+                offered.Add(entry);
+            }
+        }
+
+        return Service.Offer(offered);
+    }
+
+    [JSInvokable]
+    public JsonElement Post(JsonElement draft) =>
+        Wire.Write(PostOutcome.From(Service.Submit(Wire.Read<EntryDraft>(draft), Client)));
+
+    public async ValueTask DisposeAsync()
+    {
+        await StopAsync();
+        await JsCleanup.DisposeAsync(_client, "dispose");
+        await JsCleanup.DisposeAsync(_module, null);
+        _self?.Dispose();
+    }
+
+    private async Task SendAsync(IReadOnlyList<NestUpdate> batch, CancellationToken cancellationToken)
+    {
+        await _attached.Task.WaitAsync(cancellationToken);
+        await InvokeAsync(() => _client is null
+            ? Task.FromException(new InvalidOperationException("The sync module is not attached."))
+            : _client.InvokeVoidAsync("apply", cancellationToken, batch).AsTask());
+    }
+
+    private async Task StopAsync()
+    {
+        if (_subscriber is not null)
+        {
+            Service.Unsubscribe(_subscriber);
+            _subscriber = null;
+        }
+
+        if (_outbox is not null)
+        {
+            await _outbox.DisposeAsync();
+            _outbox = null;
+        }
+    }
+
+    private sealed class Subscriber(Outbox<NestUpdate> outbox) : INestSubscriber
+    {
+        public bool Deliver(NestUpdate update) => outbox.TryPost(update);
+    }
+}

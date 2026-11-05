@@ -1,0 +1,112 @@
+[
+  {
+    "input": "https://www.zillow.com/homedetails/2893-State-Route-26-Gln-Glen-Aubrey-NY-13777/29747113_zpid/",
+    "key": "zillow:29747113",
+    "url": "https://www.zillow.com/homedetails/2893-State-Route-26-Gln-Glen-Aubrey-NY-13777/29747113_zpid/"
+  },
+  {
+    "input": "https://www.zillow.com/homedetails/29747113_zpid/",
+    "key": "zillow:29747113",
+    "url": "https://www.zillow.com/homedetails/29747113_zpid/"
+  },
+  {
+    "input": "https://www.zillow.com/homedetails/2893-State-Route-26-Gln-Glen-Aubrey-NY-13777/29747113_zpid/?utm_source=share&mmlb=g,0",
+    "key": "zillow:29747113",
+    "url": "https://www.zillow.com/homedetails/2893-State-Route-26-Gln-Glen-Aubrey-NY-13777/29747113_zpid/"
+  },
+  {
+    "input": "Check out this home on Zillow: https://www.zillow.com/homedetails/29747113_zpid/?utm_campaign=x.",
+    "key": "zillow:29747113",
+    "url": "https://www.zillow.com/homedetails/29747113_zpid/"
+  },
+  {
+    "input": "HTTPS://WWW.ZILLOW.COM/homedetails/29747113_zpid",
+    "key": "zillow:29747113",
+    "url": "https://www.zillow.com/homedetails/29747113_zpid"
+  },
+  {
+    "input": "https://zillow.com/homes/29747113_zpid/#photo",
+    "key": "zillow:29747113",
+    "url": "https://zillow.com/homes/29747113_zpid/"
+  },
+  {
+    "input": "https://www.redfin.com/NY/Glen-Aubrey/2893-State-Route-26-13777/home/88990011",
+    "key": "redfin:88990011",
+    "url": "https://www.redfin.com/NY/Glen-Aubrey/2893-State-Route-26-13777/home/88990011"
+  },
+  {
+    "input": "https://www.redfin.com/NY/New-York/100-W-57th-St-10019/unit-12B/home/45021234?utm=1",
+    "key": "redfin:45021234",
+    "url": "https://www.redfin.com/NY/New-York/100-W-57th-St-10019/unit-12B/home/45021234"
+  },
+  {
+    "input": "(see https://www.redfin.com/home/123)",
+    "key": "redfin:123",
+    "url": "https://www.redfin.com/home/123"
+  },
+  {
+    "input": "https://www.realtor.com/realestateandhomes-detail/2893-State-Route-26_Glen-Aubrey_NY_13777_M41234-56789",
+    "key": "realtor:m41234-56789",
+    "url": "https://www.realtor.com/realestateandhomes-detail/2893-State-Route-26_Glen-Aubrey_NY_13777_M41234-56789"
+  },
+  {
+    "input": "http://realtor.com/realestateandhomes-detail/2893-State-Route-26_Glen-Aubrey_NY_13777_M41234-56789?view=qv",
+    "key": "realtor:m41234-56789",
+    "url": "https://realtor.com/realestateandhomes-detail/2893-State-Route-26_Glen-Aubrey_NY_13777_M41234-56789"
+  },
+  {
+    "input": "https://www.homes.com/property/2893-state-route-26-glen-aubrey-ny/abc123/?t=1",
+    "key": "url:5bf011c3c565233f",
+    "url": "https://www.homes.com/property/2893-state-route-26-glen-aubrey-ny/abc123/"
+  },
+  {
+    "input": "http://homes.com/property/2893-state-route-26-glen-aubrey-ny/abc123",
+    "key": "url:5bf011c3c565233f",
+    "url": "http://homes.com/property/2893-state-route-26-glen-aubrey-ny/abc123"
+  },
+  {
+    "input": "https://www.zillow.com/glen-aubrey-ny/",
+    "key": "url:fd3775b3ba1facc9",
+    "url": "https://www.zillow.com/glen-aubrey-ny/"
+  },
+  {
+    "input": "https://www.zillow.com/homedetails/0_zpid/",
+    "key": "url:15724a359268b770",
+    "url": "https://www.zillow.com/homedetails/0_zpid/"
+  },
+  {
+    "input": "https://example.com",
+    "key": "url:576846634e2714c6",
+    "url": "https://example.com/"
+  },
+  {
+    "input": "https://example.com:8443/a//",
+    "key": "url:d3f36582559e4f7e",
+    "url": "https://example.com:8443/a//"
+  },
+  {
+    "input": "not a link",
+    "key": null,
+    "url": null
+  },
+  {
+    "input": "ftp://example.com/x",
+    "key": null,
+    "url": null
+  },
+  {
+    "input": "https://localhost/home",
+    "key": null,
+    "url": null
+  },
+  {
+    "input": "https://user@evil.com/x",
+    "key": null,
+    "url": null
+  },
+  {
+    "input": "",
+    "key": null,
+    "url": null
+  }
+]

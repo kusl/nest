@@ -1,0 +1,33 @@
+@inherits LayoutComponentBase
+
+<header class="site-header">
+    <a class="brand" href="">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 15 16 6l11 9v11H5Z" /><path class="door" d="M13 26v-6h6v6" /></svg>
+        nest
+    </a>
+    <nav aria-label="Main">
+        <NavLink href="" Match="NavLinkMatch.All">Homes</NavLink>
+        <NavLink href="about">About</NavLink>
+    </nav>
+    <ThemeToggle />
+</header>
+
+<main>
+    @Body
+</main>
+
+<footer class="site-footer">
+    <span>No accounts. No cookies. Nothing kept for long.</span>
+    <a href="https://github.com/kusl/nest">Source code</a>
+    <span>AGPL-3.0-or-later</span>
+</footer>
+
+<p id="announcer" class="visually-hidden" aria-live="polite" data-permanent="announcer"></p>
+
+<ReconnectBanner />
+
+<div id="blazor-error-ui" data-nosnippet>
+    Something went wrong on this page.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss" aria-label="Dismiss">✕</span>
+</div>

@@ -1,0 +1,55 @@
+@page "/about"
+
+<PageTitle>About Nest</PageTitle>
+
+<h1>About</h1>
+<p class="lede">Nest is a shared notebook for house hunting. Paste links to homes, fill in what you know about them and talk about them. There are no accounts and the server keeps very little. Each browser keeps a copy of what it has seen and hands it back when the server has forgotten.</p>
+
+<h2>Why it exists</h2>
+<p>Looking for a home with other people means sending links back and forth across apps and tabs, and losing track of who said what about which house. Nest gives every home one page that anyone with the link to this site can add to.</p>
+<p>It is also a demonstration: a plain Blazor Server app on a free hosting plan with a quarter of a CPU and 256 MB of memory, no database, no cookies and no third-party code. The HTML, CSS and JavaScript are all written by hand.</p>
+
+<h2>What you can do</h2>
+<ul>
+    <li><strong>Add a home</strong> by pasting a link from Zillow, Redfin, Realtor.com or any other site, or by typing its street address and ZIP code. Text shared from another app works too; Nest finds the link inside it.</li>
+    <li><strong>Fill in details</strong>: price, status, type, bedrooms, bathrooms, square feet, lot size, year built, HOA, taxes, parking, heating, MLS number and the address. Only what you change is sent.</li>
+    <li><strong>Leave comments</strong> of up to 4,000 characters, emoji included. Unfinished comments are kept in this browser until you send them.</li>
+    <li><strong>Add more links</strong> to the same home, from other sites.</li>
+    <li><strong>Filter</strong> the list by street, city, ZIP code or ID, or show only the homes you added to.</li>
+</ul>
+
+<h2>How the same home is recognized</h2>
+<p>Every home is known by one or more IDs:</p>
+<ul>
+    <li>A Zillow ID (<code>zpid</code>), Redfin ID or Realtor.com property ID, read from the link. Query strings, tracking codes and the address part of the link are ignored, so <code>zillow.com/homedetails/2893-State-Route-26-…/29747113_zpid/</code> and <code>zillow.com/homedetails/29747113_zpid/?utm_source=share</code> are the same home.</li>
+    <li>The street address and ZIP code, in a standard form: <code>Street</code> and <code>St</code>, <code>Route</code> and <code>Rte</code>, <code>Apt 4</code> and <code>#4</code> all match.</li>
+    <li>For other sites, the link itself without its query string.</li>
+</ul>
+<p>Everything anyone adds is filed under all the IDs its home had at that moment. Anything that shares an ID with anything else ends up on the same page. So if one person adds a Zillow link and its address, and later someone else adds a Redfin link with the same address, both appear on one page, with every detail and comment from both.</p>
+<p>When two people set the same detail, the newest value wins and the one before it is shown next to it. Comments are never merged away; they are listed oldest first.</p>
+<p>Merging cannot be undone. A wrong link or address joins two homes for everyone who has seen it.</p>
+
+<h2>How it works</h2>
+<ul>
+    <li>Every addition gets a UUIDv7 from the server clock, so its ID also records when it happened. Anything that claims to come from the future is rejected.</li>
+    <li>The server keeps the newest 1,000 additions in memory and forgets everything when it restarts, which can happen at any time.</li>
+    <li>Your browser keeps up to 20,000 additions in IndexedDB, oldest removed first. When you open Nest, it asks the server what it has, downloads what it is missing and offers back what the server has forgotten. The server takes back older additions after a restart only if they are already in the standard form and fit among its newest 1,000.</li>
+    <li>A solid border means the server still has it. A dotted border means only browsers have it now.</li>
+    <li>Pages are rendered on the server and arrive as plain HTML. The home list and each home's page open one live connection, over a WebSocket, so changes appear for everyone at once.</li>
+    <li>Nest never contacts Zillow, Redfin or any other site. It only reads the links you paste. Every detail comes from the people using it and is not checked.</li>
+    <li>A strict Content Security Policy only allows scripts, styles and connections from this site, and there are no inline scripts.</li>
+</ul>
+
+<h2>Before you post</h2>
+<p class="warning">Anything you add goes to every connected browser at once and is stored on their devices. It can't be edited, deleted or recalled. Nothing is moderated. Don't share anything private.</p>
+
+<h2>Your data</h2>
+<p>There are no accounts, no cookies and no tracking. Your theme, the homes filter and unfinished comments are kept in this browser's local storage; everything else in its IndexedDB. What you added is marked as yours only in this browser. Rate limits count by network address in the server's memory only; addresses are never saved or shown.</p>
+<p class="clear">
+    <button type="button" data-clear-local="clear-status">Delete this browser's copy</button>
+    <output id="clear-status"></output>
+</p>
+<p>This deletes the homes, details, comments and drafts kept on this device. It does not delete anything from the server or from anyone else's browser. The next time you open Nest, this browser fills up again from the server.</p>
+
+<h2>Source code</h2>
+<p>The code is on <a href="https://github.com/kusl/nest">GitHub</a> under the GNU Affero General Public License, version 3 or later. If you run a modified copy for other people, you have to offer them its source too.</p>

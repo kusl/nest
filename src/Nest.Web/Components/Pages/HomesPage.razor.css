@@ -1,0 +1,180 @@
+.add {
+    display: grid;
+    gap: .75rem;
+    margin-block-end: 1.5rem;
+}
+
+.paste {
+    display: grid;
+    gap: .35rem;
+}
+
+.paste label {
+    font-weight: 650;
+}
+
+.row {
+    display: flex;
+    gap: .5rem;
+}
+
+.row input {
+    flex: 1;
+    min-inline-size: 0;
+}
+
+.preview {
+    min-block-size: 1.4rem;
+    margin: 0;
+    color: var(--muted);
+    font-size: .875rem;
+}
+
+.by-address summary {
+    inline-size: fit-content;
+    color: var(--link);
+    cursor: pointer;
+}
+
+.address {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+    gap: .75rem;
+    margin-block-start: .75rem;
+}
+
+.address ::deep .field:first-child {
+    grid-column: 1 / -1;
+}
+
+.address ::deep .field {
+    display: grid;
+    gap: .2rem;
+}
+
+.address ::deep label {
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+.address ::deep .error {
+    color: var(--danger);
+    font-size: .8rem;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    grid-column: 1 / -1;
+}
+
+.homes {
+    display: grid;
+}
+
+.homes-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .25rem 1rem;
+}
+
+.homes-head h2 {
+    margin-block-end: 0;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    margin-block: .75rem 1rem;
+}
+
+.filters input[type="search"] {
+    flex: 1 1 14rem;
+    inline-size: auto;
+}
+
+.check {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .875rem;
+    cursor: pointer;
+}
+
+.check input {
+    inline-size: 1.15rem;
+    min-block-size: 1.15rem;
+    margin: 0;
+}
+
+.cards {
+    display: grid;
+    gap: .6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cards ::deep .home {
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    background: var(--bg);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 6rem;
+}
+
+.cards ::deep .home.archived {
+    border-style: dotted;
+    border-color: var(--muted);
+}
+
+.cards ::deep .home a {
+    display: grid;
+    gap: .1rem;
+    padding: .65rem .85rem;
+    color: var(--fg);
+    text-decoration: none;
+}
+
+.cards ::deep .home a:hover .title {
+    text-decoration: underline;
+}
+
+.cards ::deep .title {
+    font-size: 1.1rem;
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.cards ::deep .place,
+.cards ::deep .summary {
+    color: var(--muted);
+}
+
+.cards ::deep .summary {
+    color: var(--fg);
+    font-variant-numeric: tabular-nums;
+}
+
+.cards ::deep .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .1rem .9rem;
+    margin-block-start: .2rem;
+    color: var(--muted);
+    font-size: .8rem;
+}
+
+.more {
+    justify-self: center;
+    margin-block-start: 1rem;
+    border-color: var(--line);
+    color: var(--fg);
+    background: var(--surface);
+}

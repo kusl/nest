@@ -1,0 +1,71 @@
+@page "/"
+@inject NestService Service
+
+<PageTitle>Nest</PageTitle>
+
+<h1>Homes we're looking at</h1>
+<p class="lede">Paste a link from Zillow, Redfin, Realtor.com or anywhere else. Everyone here can fill in the details and leave comments. Your browser keeps a copy of everything it sees, so nothing is lost when the server forgets.</p>
+
+<SyncIsland Client="@_client" @rendermode="InteractiveServer" />
+
+<div class="view" data-view="homes" data-permanent="homes-view">
+    <section class="add" aria-labelledby="add-title">
+        <h2 id="add-title" class="visually-hidden">Add a home</h2>
+        <form id="add-link" class="paste" autocomplete="off">
+            <label for="link-input">Paste a link to a home</label>
+            <div class="row">
+                <input id="link-input" name="link" type="text" inputmode="url" enterkeyhint="go" autocapitalize="off" spellcheck="false"
+                       placeholder="https://www.zillow.com/homedetails/…" aria-describedby="link-preview" />
+                <button type="submit" disabled>Open</button>
+            </div>
+            <p id="link-preview" class="preview" aria-live="polite"></p>
+        </form>
+        <details class="by-address">
+            <summary>No link? Add a home by its address</summary>
+            <form id="add-address" class="address" autocomplete="off">
+                @foreach (var field in ListingFields.All.Where(candidate => ListingFields.AddressKeys.Contains(candidate.Key)))
+                {
+                    <FieldInput Field="field" Prefix="add" />
+                }
+                <div class="actions">
+                    <button type="submit" disabled>Add home</button>
+                    <p id="address-status" class="status" role="status"></p>
+                </div>
+            </form>
+        </details>
+    </section>
+
+    <section class="homes" aria-labelledby="homes-title">
+        <div class="homes-head">
+            <h2 id="homes-title">Homes</h2>
+            <p id="sync-status" class="sync" data-status="local" role="status">Connecting…</p>
+        </div>
+        <div class="filters">
+            <label class="visually-hidden" for="homes-filter">Filter homes</label>
+            <input id="homes-filter" type="search" placeholder="Filter by street, city, ZIP or ID" autocomplete="off" />
+            <label class="check"><input id="homes-mine" type="checkbox" /> Only homes I added to</label>
+        </div>
+        <p id="homes-empty" class="empty" hidden="@(_listings.Count > 0)">No homes yet. Paste a link to start.</p>
+        <ol id="homes-list" class="cards">
+            @foreach (var listing in _listings.Take(100))
+            {
+                <ListingCard @key="listing.Key" Listing="listing" />
+            }
+        </ol>
+        <button type="button" id="homes-more" class="more" hidden>Show more homes</button>
+    </section>
+</div>
+
+@code {
+    private IReadOnlyList<Listing> _listings = [];
+    private string _client = ClientAddress.Unknown;
+
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _listings = Service.Listings;
+        _client = ClientAddress.Key(HttpContext?.Connection.RemoteIpAddress);
+    }
+}

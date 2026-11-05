@@ -55,7 +55,7 @@ else
                 <form id="facts-form" class="facts-form" autocomplete="off" novalidate>
                     @foreach (var field in ListingFields.All)
                     {
-                        <FieldInput Field="field" Prefix="fact" Value="@_fields.GetValueOrDefault(field.Key)" />
+                        <FieldInput FieldKey="@field.Key" Prefix="fact" Value="@_fields.GetValueOrDefault(field.Key)" />
                     }
                     <div class="actions">
                         <button type="submit" disabled>Save details</button>
@@ -71,7 +71,7 @@ else
             <ol id="comments" class="comments">
                 @foreach (var comment in _listing?.Comments ?? [])
                 {
-                    <CommentItem @key="comment.Id" Comment="comment" />
+                    <CommentItem @key="comment.Id" Id="comment.Id" Text="@comment.Text" />
                 }
             </ol>
             <p id="comments-empty" class="empty" hidden="@(_listing?.Comments.Count > 0)">No comments yet.</p>

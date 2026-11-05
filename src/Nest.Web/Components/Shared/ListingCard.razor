@@ -1,30 +1,48 @@
-<li class="home" data-key="@Listing.Key">
-    <a href="@ListingKey.Path(Listing.Key)">
-        <strong class="title">@Listing.Title</strong>
-        @if (Listing.Place is { Length: > 0 } place && place != Listing.Title)
+<li class="home" data-key="@HomeKey">
+    <a href="@ListingKey.Path(HomeKey)">
+        <strong class="title">@Title</strong>
+        @if (Place is { Length: > 0 } && Place != Title)
         {
-            <span class="place">@place</span>
+            <span class="place">@Place</span>
         }
-        @if (Listing.Summary is { Length: > 0 } summary)
+        @if (Summary is { Length: > 0 })
         {
-            <span class="summary">@summary</span>
+            <span class="summary">@Summary</span>
         }
         <span class="meta">
-            @if (Listing.Sources is { Length: > 0 } sources)
+            @if (Sources is { Length: > 0 })
             {
-                <span>@sources</span>
+                <span>@Sources</span>
             }
             <span>@CommentsLabel</span>
-            <time datetime="@EntryTime.Iso(Listing.Updated)">@EntryTime.Label(Listing.Updated)</time>
+            <time datetime="@EntryTime.Iso(Updated)">@EntryTime.Label(Updated)</time>
         </span>
     </a>
 </li>
 
 @code {
     [Parameter, EditorRequired]
-    public Listing Listing { get; set; } = null!;
+    public string HomeKey { get; set; } = "";
 
-    private string CommentsLabel => Listing.Comments.Count == 1
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public string? Place { get; set; }
+
+    [Parameter]
+    public string? Summary { get; set; }
+
+    [Parameter]
+    public string? Sources { get; set; }
+
+    [Parameter, EditorRequired]
+    public int CommentCount { get; set; }
+
+    [Parameter, EditorRequired]
+    public Guid Updated { get; set; }
+
+    private string CommentsLabel => CommentCount == 1
         ? "1 comment"
-        : string.Concat(Listing.Comments.Count.ToString(System.Globalization.CultureInfo.InvariantCulture), " comments");
+        : string.Concat(CommentCount.ToString(System.Globalization.CultureInfo.InvariantCulture), " comments");
 }

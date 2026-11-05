@@ -25,7 +25,7 @@
             <form id="add-address" class="address" autocomplete="off">
                 @foreach (var field in ListingFields.All.Where(candidate => ListingFields.AddressKeys.Contains(candidate.Key)))
                 {
-                    <FieldInput Field="field" Prefix="add" />
+                    <FieldInput FieldKey="@field.Key" Prefix="add" />
                 }
                 <div class="actions">
                     <button type="submit" disabled>Add home</button>
@@ -49,7 +49,8 @@
         <ol id="homes-list" class="cards">
             @foreach (var listing in _listings.Take(100))
             {
-                <ListingCard @key="listing.Key" Listing="listing" />
+                <ListingCard @key="listing.Key" HomeKey="@listing.Key" Title="@listing.Title" Place="@listing.Place" Summary="@listing.Summary"
+                             Sources="@listing.Sources" CommentCount="listing.Comments.Count" Updated="listing.Updated" />
             }
         </ol>
         <button type="button" id="homes-more" class="more" hidden>Show more homes</button>

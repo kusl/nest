@@ -10,4 +10,5 @@ Status: accepted
 - `App.razor.js` mounts the view for the element with `data-view` on load and on `enhancedload`, and disposes the previous one. The view root is `data-permanent` with a per-page id, so enhanced navigation does not overwrite JavaScript-owned markup and two different homes never share one.
 - Shared logic is in plain modules under `wwwroot/js` (`keys`, `fields`, `merge`, `store`, `sync`), served at `/js/`. One `Nest` instance per document holds the entries, so the island and the view see the same state.
 - Reusable Razor components: `ListingCard`, `CommentItem`, `FactList`, `FieldInput`.
+- Razor components are generated as public classes, so their parameters use only public types (strings, numbers, `Guid`, framework collections). Domain types stay internal; a component that needs one resolves it from a key, as `FieldInput` does with `ListingFields.Find`.
 - No bUnit: components are thin; logic lives in services and modules tested directly, and pages are covered by integration and Playwright tests.

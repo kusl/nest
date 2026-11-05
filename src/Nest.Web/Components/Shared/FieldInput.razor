@@ -1,26 +1,31 @@
-<div class="field" data-kind="@Field.Kind" data-wide="@(Field.Kind == FieldKind.Text && Field.MaxLength > 60)">
-    <label for="@Id">@Field.Label</label>
-    @if (Field.Options is { } options)
-    {
-        <select id="@Id" name="@Field.Key" aria-describedby="@ErrorId">
-            <option value="">Not set</option>
-            @foreach (var option in options)
-            {
-                <option value="@option" selected="@(option == Value)">@option</option>
-            }
-        </select>
-    }
-    else
-    {
-        <input id="@Id" name="@Field.Key" type="text" inputmode="@InputMode" autocomplete="off" spellcheck="@Spellcheck"
-               maxlength="@MaxLength" value="@Value" placeholder="@Field.Hint" aria-describedby="@ErrorId" />
-    }
-    <small id="@ErrorId" class="error" aria-live="polite"></small>
-</div>
+@if (_field is { } field)
+{
+    <div class="field" data-kind="@field.Kind" data-wide="@(field.Kind == FieldKind.Text && field.MaxLength > 60)">
+        <label for="@Id">@field.Label</label>
+        @if (field.Options is { } options)
+        {
+            <select id="@Id" name="@field.Key" aria-describedby="@ErrorId">
+                <option value="">Not set</option>
+                @foreach (var option in options)
+                {
+                    <option value="@option" selected="@(option == Value)">@option</option>
+                }
+            </select>
+        }
+        else
+        {
+            <input id="@Id" name="@field.Key" type="text" inputmode="@InputMode(field.Kind)" autocomplete="off" spellcheck="@Spellcheck(field.Kind)"
+                   maxlength="@MaxLength(field)" value="@Value" placeholder="@field.Hint" aria-describedby="@ErrorId" />
+        }
+        <small id="@ErrorId" class="error" aria-live="polite"></small>
+    </div>
+}
 
 @code {
+    private ListingField? _field;
+
     [Parameter, EditorRequired]
-    public ListingField Field { get; set; } = null!;
+    public string FieldKey { get; set; } = "";
 
     [Parameter, EditorRequired]
     public string Prefix { get; set; } = "";
@@ -28,18 +33,20 @@
     [Parameter]
     public string? Value { get; set; }
 
-    private string Id => string.Concat(Prefix, "-", Field.Key);
+    private string Id => string.Concat(Prefix, "-", FieldKey);
 
     private string ErrorId => string.Concat(Id, "-error");
 
-    private string InputMode => Field.Kind switch
+    protected override void OnParametersSet() => _field = ListingFields.Find(FieldKey);
+
+    private static string InputMode(FieldKind kind) => kind switch
     {
         FieldKind.Count or FieldKind.Integer or FieldKind.Zip => "numeric",
         FieldKind.Decimal => "decimal",
         _ => "text",
     };
 
-    private string Spellcheck => Field.Kind == FieldKind.Text ? "true" : "false";
+    private static string Spellcheck(FieldKind kind) => kind == FieldKind.Text ? "true" : "false";
 
-    private int MaxLength => Field.Kind == FieldKind.Text ? Field.MaxLength : 64;
+    private static int MaxLength(ListingField field) => field.Kind == FieldKind.Text ? field.MaxLength : 64;
 }
